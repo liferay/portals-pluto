@@ -106,7 +106,7 @@
 -->
 
       <test.server.username.id>_com_liferay_login_web_portlet_LoginPortlet_login</test.server.username.id>
-      <test.server.username>test</test.server.username>
+      <test.server.username>test@liferay.com</test.server.username>
       <test.server.password.id>_com_liferay_login_web_portlet_LoginPortlet_password</test.server.password.id>
       <test.server.password>test</test.server.password>
 
