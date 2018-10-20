@@ -313,7 +313,7 @@ public class TCKSimpleTestDriver {
     */
    @Before
    public void setUp() throws Exception {
-      debugLines.add("   before test.");
+      debugLines.add("setUp: before test.");
    }
 
    /**
@@ -321,7 +321,7 @@ public class TCKSimpleTestDriver {
     */
    @After
    public void tearDown() throws Exception {
-      debugLines.add("   after test.");
+      debugLines.add("tearDown: after test.");
       if (debug) {
          for (String line : debugLines) {
             System.out.println(line);
@@ -331,7 +331,7 @@ public class TCKSimpleTestDriver {
 
    @Test
    public void test() {
-      debugLines.add("   execute test.");
+      debugLines.add("test: execute test.");
       
       if (dryrun) {
          return;
@@ -343,14 +343,14 @@ public class TCKSimpleTestDriver {
          // First look for the test results or links already being present on the page. 
 
          List<WebElement> wels = driver.findElements(By.name(tcName));
-         debugLines.add("   TC elements already on page: " + !wels.isEmpty() + ", tcname===" + tcName + "===");
+         debugLines.add("test: TC elements already on page: " + !wels.isEmpty() + ", tcname===" + tcName + "===");
          if (wels.isEmpty()) {
             wels = accessPage();
          }
          
          // process links if present
          wels = processClickable(wels);
-         debugLines.add("   After processing clickable, results found: " + !wels.isEmpty());
+         debugLines.add("test: After processing clickable, results found: " + !wels.isEmpty());
 
          // wait for any async JavaScript tests to complete
          processAsync();
@@ -367,6 +367,8 @@ public class TCKSimpleTestDriver {
             System.out.println(line);
          }
          
+         e.printStackTrace();
+         
          assertTrue("Test case " + tcName + " failed. " +  
                " Setup link could not be accessed. \nException: " + e.toString(), false);
       }
@@ -380,11 +382,11 @@ public class TCKSimpleTestDriver {
     */
    protected List<WebElement> accessPage() throws Exception {
       List<WebElement> wels = driver.findElements(By.linkText(page));
-      debugLines.add("   Access page, link found: " + !wels.isEmpty() + ", page===" + page + "===");
+      debugLines.add("accessPage: Access page, link found: " + !wels.isEmpty() + ", page===" + page + "===");
      
       if (wels.isEmpty()) {
          // retry through login page
-         debugLines.add("accessPage: debugLines:   logging in ... ");
+         debugLines.add("accessPage: logging in ... ");
          login();
          wels = driver.findElements(By.linkText(page));
          if (wels.isEmpty()) {
@@ -470,10 +472,10 @@ public class TCKSimpleTestDriver {
          }
 
          boolean ok = res.contains(Constants.SUCCESS);
-         debugLines.add("   Test OK: " + ok + ", results: " + res + ", details: " + det);
+         debugLines.add("checkResults: Test OK: " + ok + ", results: " + res + ", details: " + det);
          assertTrue(det, ok);
       } else {
-         debugLines.add("   Results not found");
+         debugLines.add("checkResults: Results not found");
          assertTrue("Test case " + tcName + " failed. Results could not be found.", false);
       }
    }
@@ -501,15 +503,15 @@ public class TCKSimpleTestDriver {
          tcels = wel.findElements(By.id(setupId));
          if (!tcels.isEmpty()) break;
       }
-      debugLines.add("   Setup link found: " + ((tcels != null) && !tcels.isEmpty()));
+      debugLines.add("processClickable: setup link found: " + ((tcels != null) && !tcels.isEmpty()));
       
       // If were dealing with async, make sure the JavaScript is initialized
       List<WebElement> acels = driver.findElements(By.id(asyncId));
-      debugLines.add("   Async elements found: " + ((acels != null) && !acels.isEmpty()));
+      debugLines.add("processClickable: Async elements found: " + ((acels != null) && !acels.isEmpty()));
       if (acels != null && !acels.isEmpty()) {
          WebDriverWait wdw = new WebDriverWait(driver, timeout);
          wdw.until(ExpectedConditions.invisibilityOfElementLocated(By.id(notreadyId)));
-         debugLines.add("   Async elements are now ready.");
+         debugLines.add("processClickable: Async elements are now ready.");
       }
 
       // Click setup link if found
@@ -531,7 +533,7 @@ public class TCKSimpleTestDriver {
             wel = tcels.get(0);
             wel.click();
          }
-         debugLines.add("   Clicked setup link.");
+         debugLines.add("processClickable: clicked setup link.");
 
          WebDriverWait wdw = new WebDriverWait(driver, timeout);
 
@@ -541,10 +543,10 @@ public class TCKSimpleTestDriver {
          wdw.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(expr)));
          wels = driver.findElements(By.name(tcName));
          
-         debugLines.add("   Found elements: " + (!wels.isEmpty()));
+         debugLines.add("processClickable: Found elements: " + (!wels.isEmpty()));
          List<WebElement> xels = driver.findElements(By.xpath(expr));
          for (WebElement w : xels) {
-            debugLines.add("      Element: " + w.getTagName() + ", id=" + w.getAttribute("id"));
+            debugLines.add("processClickable: Element: " + w.getTagName() + ", id=" + w.getAttribute("id"));
          }
       }
       
@@ -553,7 +555,7 @@ public class TCKSimpleTestDriver {
          tcels = wel.findElements(By.id(actionId));
          if (!tcels.isEmpty()) break;
       }
-      debugLines.add("   Clickable link found: " + ((tcels != null) && !tcels.isEmpty()));
+      debugLines.add("processClickable: clickable action link found: " + ((tcels != null) && !tcels.isEmpty()));
       
       if (tcels != null && !tcels.isEmpty()) {
          WebElement wel = tcels.get(0);
@@ -577,10 +579,9 @@ public class TCKSimpleTestDriver {
          wdw.until(ExpectedConditions.visibilityOfElementLocated(By.id(resultId)));
          wels = driver.findElements(By.name(tcName));
          if ((wels == null) || wels.isEmpty()) {
-            throw new Exception("Test case " + tcName + " failed. No results after action link click.");
+            throw new Exception("processClickable: Test case " + tcName + " failed. No results after action link click.");
          }
       }
-      
 
       return wels;
    }
@@ -603,7 +604,7 @@ public class TCKSimpleTestDriver {
 
       tcels = driver.findElements(By.id(asyncId));
 
-      debugLines.add("   Element with async id=" + asyncId + " found: " + !tcels.isEmpty());
+      debugLines.add("processAsync: element with async id=" + asyncId + " found: " + !tcels.isEmpty());
       
       if (tcels.isEmpty()) {
          // no async element

@@ -120,7 +120,7 @@ public class TCKLiferayTestDriver extends TCKSimpleTestDriver {
 
    @Test
    public void test() {
-      debugLines.add("   execute test.");
+      debugLines.add("test: execute test.");
 
       if (dryrun) {
          return;
@@ -173,7 +173,7 @@ public class TCKLiferayTestDriver extends TCKSimpleTestDriver {
             exclusive = false;
          }
 
-         debugLines.add("   TC elements already on page: " + !wels.isEmpty() + ", tcname===" + tcName + "===");
+         debugLines.add("test: elements on page: " + !wels.isEmpty() + ", tcname===" + tcName + "===");
          if (wels.isEmpty()) {
             System.out.println("test: wels.isEmpty() ... accessing page normally ... WHY IS THIS HAPPENING?");
             wels = accessPage();
@@ -183,11 +183,12 @@ public class TCKLiferayTestDriver extends TCKSimpleTestDriver {
 
          // process links if present
          wels = processClickable(wels);
-         debugLines.add("   After processing clickable, results found: " + !wels.isEmpty());
+         debugLines.add("test: after processing clickable, results found: " + !wels.isEmpty());
 
          // wait for any async JavaScript tests to complete
          processAsync();
-
+         
+         debugLines.add("test: after processAsync: checkResults ...");
          checkResults();
 
       } catch(Exception e) {
@@ -196,11 +197,13 @@ public class TCKLiferayTestDriver extends TCKSimpleTestDriver {
          // and mark the TC as failed.
          String currentUrl = driver.getCurrentUrl();
 
-         System.out.println("   Exception occurred: " + e.getMessage());
-         System.out.println("      diagnostic url = " + currentUrl);
+         System.out.println("test: Exception occurred: " + e.getMessage());
+         System.out.println("test: diagnostic url = " + currentUrl);
          for (String line : debugLines) {
             System.out.println(line);
          }
+
+         e.printStackTrace();
 
          assertTrue("Test case " + tcName + " failed. " +
                " Setup link could not be accessed. \nException: " + e.toString(), false);
