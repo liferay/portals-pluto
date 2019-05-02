@@ -253,12 +253,14 @@ public class TCKTestDriver extends SimpleTestDriver {
          javascriptExecutor.executeScript("window.scrollTo(0, (arguments[0].getBoundingClientRect().top + window.pageYOffset) - (window.innerHeight / 2));", wel);
       }
       click(wel);
-      WebDriverWait wdw = new WebDriverWait(driver, timeout);
-      wdw.until(ExpectedConditions.visibilityOfElementLocated(By.name(tcName)));
       wels = driver.findElements(By.name(tcName));
       if (wels.isEmpty()) {
          throw new Exception("For test case " + tcName + ": no elements found.");
       }
+
+      WebDriverWait wdw = new WebDriverWait(driver, timeout);
+      wdw.until(ExpectedConditions.visibilityOfElement(By.name(tcName)));
+
       return wels;
    }
 
