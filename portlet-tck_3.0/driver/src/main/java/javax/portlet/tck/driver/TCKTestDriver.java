@@ -259,7 +259,7 @@ public class TCKTestDriver extends SimpleTestDriver {
       }
 
       WebDriverWait wdw = new WebDriverWait(driver, timeout);
-      wdw.until(ExpectedConditions.visibilityOfElement(By.name(tcName)));
+      wdw.until(ExpectedConditions.visibilityOf(wels.get(0)));
 
       return wels;
    }
