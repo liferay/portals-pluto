@@ -523,7 +523,7 @@ public class DispatcherReqRespTests4_SPEC2_19_IncludeServletResourceRequest_serv
       /* the method HttpServletRequest.getRealPath must return null"          */
       TestResult tr27 = tcd.getTestResultFailed(V2DISPATCHERREQRESPTESTS4_SPEC2_19_INCLUDESERVLETRESOURCEREQUEST_GETREALPATH);
       try {
-         String isval = request.getRealPath("/WEB-INF/portlet.xml");
+         String isval = request.getServletContext().getRealPath("/WEB-INF/portlet.xml");
          CompareUtils.stringsEqual(isval, null, tr27);
       } catch(Exception e) {tr27.appendTcDetail(e.toString());}
       tr27.writeTo(writer);

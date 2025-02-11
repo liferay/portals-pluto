@@ -426,7 +426,7 @@ limitations under the License.
       /* method HttpServletRequest.getRealPath must return null"              */
       TestResult tr27 = tcd.getTestResultFailed(V2DISPATCHERREQRESPTESTS1_SPEC2_19_FORWARDJSPACTIONREQUEST_GETREALPATH);
       try {
-         String isval = request.getRealPath("/WEB-INF/portlet.xml");
+         String isval = request.getServletContext().getRealPath("/WEB-INF/portlet.xml");
          CompareUtils.stringsEqual(isval, null, tr27);
       } catch(Exception e) {tr27.appendTcDetail(e.toString());}
       tr27.writeTo(writer);
