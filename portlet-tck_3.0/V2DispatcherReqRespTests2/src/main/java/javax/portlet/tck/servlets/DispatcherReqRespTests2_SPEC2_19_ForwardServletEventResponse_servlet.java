@@ -104,7 +104,7 @@ public class DispatcherReqRespTests2_SPEC2_19_ForwardServletEventResponse_servle
       /* method HttpServletResponse.encodeRedirectUrl must return null"       */
       TestResult tr2 = tcd.getTestResultFailed(V2DISPATCHERREQRESPTESTS2_SPEC2_19_FORWARDSERVLETEVENTRESPONSE_ENCODEREDIRECTURL);
       try {
-         String isval = response.encodeRedirectUrl("http://www.cnn.com/");
+         String isval = response.encodeRedirectURL("http://www.cnn.com/");
          CompareUtils.stringsEqual(isval, null, tr2);
       } catch(Exception e) {tr2.appendTcDetail(e.toString());}
       tr2.writeTo(writer);
@@ -129,7 +129,7 @@ public class DispatcherReqRespTests2_SPEC2_19_ForwardServletEventResponse_servle
       TestResult tr4 = tcd.getTestResultFailed(V2DISPATCHERREQRESPTESTS2_SPEC2_19_FORWARDSERVLETEVENTRESPONSE_ENCODEURL);
       try {
          String turl = "http://www.apache.org/";
-         String hval = (String)response.encodeUrl(turl);
+         String hval = (String)response.encodeURL(turl);
          String pval = (String)portletResp.encodeURL(turl);
          CompareUtils.stringsEqual("HttpServletResponse", hval, "EventResponse", pval, tr4);
       } catch(Exception e) {tr4.appendTcDetail(e.toString());}
