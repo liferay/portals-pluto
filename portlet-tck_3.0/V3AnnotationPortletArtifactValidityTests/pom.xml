@@ -109,6 +109,30 @@
 		</plugins>
 	</build>
 	<profiles>
+       <profile>
+			<id>liferay</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>**/spring/*.java</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<packagingExcludes>
+                        WEB-INF/applicationContext.xml,
+                        WEB-INF/classes/logging.properties
+                     </packagingExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>liferay-cdi</id>
 			<build>
